@@ -1,1 +1,30 @@
-<p>home works!</p>
+<p>
+  home works! {{ searchForm.get("summonerName")?.value }}
+  {{ searchForm.get("server")?.value }}
+</p>
+<p>version:{{ version }}</p>
+
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="summonerName" />
+
+  <select formControlName="server">
+    <option value="" disabled>Selecciona el servidor</option>
+    <option *ngFor="let server of serverKeys" [ngValue]="server">
+      {{ server }}
+    </option>
+  </select>
+
+  <button>Buscar</button>
+</form>
+
+<ng-container *ngIf="summoner">
+  <div>
+    <img
+      src="http://ddragon.leagueoflegends.com/cdn/13.14.1/img/profileicon/{{
+        summoner.profileIconId
+      }}.png"
+    />
+
+    <p>{{ summoner.name }}</p>
+  </div>
+</ng-container>
