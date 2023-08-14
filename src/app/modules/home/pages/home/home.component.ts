@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { Message } from 'primeng/api';
+
 import { PLATFORM_ROUTING_VALUES } from '@core/constants/riot';
 
 import { RiotService } from '@core/services/riot.service';
@@ -24,10 +26,12 @@ export class HomeComponent {
 
   serverKeys = Object.keys(PLATFORM_ROUTING_VALUES);
 
-  summoner?: SummonerApiResponse;
+  summoner: SummonerApiResponse | undefined;
+
+  errorMessage: Message[] | undefined;
 
   searchForm = new FormGroup({
-    summonerName: new FormControl('chibilily', [Validators.required]),
+    summonerName: new FormControl('chibililyyyyyy', [Validators.required]),
     server: new FormControl(this.serverKeys[4], [Validators.required]),
   });
 
@@ -40,9 +44,25 @@ export class HomeComponent {
 
     const serverURL = PLATFORM_ROUTING_VALUES[server as keyof typeof PLATFORM_ROUTING_VALUES];
 
-    this.riotService.summonerByName(summonerName, serverURL).subscribe(summoner => {
-      this.summoner = summoner
-      this.loading = false;
-    });
+
+    this.riotService.summonerByName(summonerName, serverURL).subscribe(
+      {
+        next: (summoner) => {
+          this.errorMessage = undefined;
+          this.summoner = summoner;
+          this.loading = false;
+        },
+        error: (err) => {
+          const { message } = err.error;
+          if (err.status === 404) {
+            this.errorMessage = [{ severity: 'error', summary: 'No encontrado', detail: `${message}` }];
+          } else {
+            this.errorMessage = [{ severity: 'error', summary: 'Error', detail: `${message}` }];
+          }
+
+          this.loading = false;
+        }
+      }
+    );
   }
 }

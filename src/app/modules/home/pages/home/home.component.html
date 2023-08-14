@@ -1,6 +1,14 @@
 <div class="h-100vh flex justify-content-center align-items-center">
   <ng-container *ngIf="!loading; else loadingSpinner">
     <div>
+      <ng-container *ngIf="errorMessage">
+        <p-messages
+          [(value)]="errorMessage"
+          [enableService]="false"
+          [closable]="true"
+        ></p-messages>
+      </ng-container>
+
       <form
         [formGroup]="searchForm"
         class="formgroup-inline"
