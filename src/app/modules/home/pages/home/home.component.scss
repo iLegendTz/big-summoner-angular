@@ -1,0 +1,32 @@
+form {
+    max-width: 700px;
+}
+
+.summoner-container {
+    display: flex;
+    justify-content: center;
+
+    /* From https://css.glass */
+    background: rgba(35, 82, 213, 0.19);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.5px);
+    -webkit-backdrop-filter: blur(5.5px);
+    border: 1px solid rgba(35, 82, 213, 0.16);
+}
+
+.summoner-container > div > .profile-picture {
+    width: auto;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.summoner-container > .information {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.summoner-container > .information > div > p {
+    font-size: 18px;
+}

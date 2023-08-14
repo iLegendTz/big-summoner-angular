@@ -18,6 +18,8 @@ export class HomeComponent {
     this.riotService.getLastDDragonVersion().subscribe(version => { this.version = version[0] });
   }
 
+  loading: boolean = false;
+
   version: string = '';
 
   serverKeys = Object.keys(PLATFORM_ROUTING_VALUES);
@@ -25,11 +27,12 @@ export class HomeComponent {
   summoner?: SummonerApiResponse;
 
   searchForm = new FormGroup({
-    summonerName: new FormControl('', [Validators.required]),
-    server: new FormControl(this.serverKeys[4], [Validators.required])
+    summonerName: new FormControl('chibilily', [Validators.required]),
+    server: new FormControl(this.serverKeys[4], [Validators.required]),
   });
 
   onSubmit(): void {
+    this.loading = true;
     const summonerName = this.searchForm.value.summonerName;
     const server = this.searchForm.value.server;
 
@@ -37,6 +40,9 @@ export class HomeComponent {
 
     const serverURL = PLATFORM_ROUTING_VALUES[server as keyof typeof PLATFORM_ROUTING_VALUES];
 
-    this.riotService.summonerByName(summonerName, serverURL).subscribe(summoner => this.summoner = summoner);
+    this.riotService.summonerByName(summonerName, serverURL).subscribe(summoner => {
+      this.summoner = summoner
+      this.loading = false;
+    });
   }
 }

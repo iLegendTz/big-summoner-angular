@@ -1,30 +1,71 @@
-<p>
-  home works! {{ searchForm.get("summonerName")?.value }}
-  {{ searchForm.get("server")?.value }}
-</p>
-<p>version:{{ version }}</p>
+<div class="h-100vh flex justify-content-center align-items-center">
+  <ng-container *ngIf="!loading; else loadingSpinner">
+    <div>
+      <form
+        [formGroup]="searchForm"
+        class="formgroup-inline"
+        (submit)="onSubmit()"
+      >
+        <div class="field col-12 md:col-9 m-0">
+          <label for="summonerName">Summoner Name</label>
+          <input
+            formControlName="summonerName"
+            type="text"
+            placeholder="Summoner Name"
+            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+          />
+        </div>
 
-<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="summonerName" />
+        <div class="field col-12 md:col-3 m-0">
+          <label for="server">Server</label>
+          <select
+            formControlName="server"
+            class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+            style="appearance: auto"
+          >
+            <option *ngFor="let server of serverKeys" [ngValue]="server">
+              {{ server }}
+            </option>
+          </select>
+        </div>
 
-  <select formControlName="server">
-    <option value="" disabled>Selecciona el servidor</option>
-    <option *ngFor="let server of serverKeys" [ngValue]="server">
-      {{ server }}
-    </option>
-  </select>
+        <div class="field col-12">
+          <button
+            type="submit"
+            class="w-full text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
 
-  <button>Buscar</button>
-</form>
+      <ng-container *ngIf="summoner">
+        <div class="d-flex justify-content-center">
+          <div class="summoner-container p-3">
+            <div class="mr-3">
+              <img
+                class="profile-picture"
+                src="http://ddragon.leagueoflegends.com/cdn/13.14.1/img/profileicon/{{
+                  summoner.profileIconId
+                }}.png"
+              />
+            </div>
 
-<ng-container *ngIf="summoner">
-  <div>
-    <img
-      src="http://ddragon.leagueoflegends.com/cdn/13.14.1/img/profileicon/{{
-        summoner.profileIconId
-      }}.png"
-    />
+            <div class="information">
+              <div>
+                <p>{{ summoner.name }}</p>
+              </div>
+              <div>
+                <p>Nivel: {{ summoner.summonerLevel }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
 
-    <p>{{ summoner.name }}</p>
-  </div>
-</ng-container>
+  <ng-template #loadingSpinner>
+    <p-progressSpinner></p-progressSpinner>
+  </ng-template>
+</div>
